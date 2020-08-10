@@ -1,3 +1,3 @@
 FIBONACCI
 
-C program uses recusrion to calculate the nth fibonacci number.
+C program uses recursion to calculate the nth fibonacci number.
