@@ -1,0 +1,75 @@
+int check_valid_person(char *SSN);
+
+void view_student_avg_grade(char *SSN)
+{
+  if(strlen(SSN) != 9)
+  {
+    printf("Please enter social security number of 9 characters\n");
+    return;
+  }
+  int i;
+  char social[9];
+  memcpy(social, SSN, 9);
+  
+  if(check_valid_person(social))
+  {
+    FILE *fp;
+    struct grades data;
+    int totalVal = 0;
+    int counter = 0;
+
+    fp = fopen("grades.db", "r+");
+
+    if(fp == NULL)
+    {
+      printf("\n Error: Cannot open file");
+      exit(1);
+    }
+
+    while(fread(&data, sizeof(struct grades), 1, fp))
+    {
+      if(strncmp(social, data.ssn, 9) == 0)
+      {
+	totalVal = totalVal + data.point;
+	counter++;
+      }
+    }
+    
+    printf("Average grade for Student "); 
+    for (i = 0; i < 9; i++)
+    {
+      printf("%c",social[i]);
+    }
+    printf(" is %d\n", totalVal/counter); 
+    fclose(fp);
+  }
+  else
+  {
+    printf("SSN not found in the database\n");
+  }
+}
+
+void view_student_avg_grade_data_menu()
+{
+  char SSN[12];
+  printf("Enter SSN: ");
+  fgets(SSN, 12, stdin);
+  if(strlen(SSN) > 10)
+  {
+    printf("SSN should have 9 characters\n");
+    return;
+  }
+  else if(strlen(SSN) < 10)
+  {
+    printf("SSN should have 9 characters\n");
+    return;
+  }
+  else
+  {
+    delete_endline_ssn(SSN);
+  }
+
+  printf("SSN: %s\n", SSN);
+ 
+  view_student_avg_grade(SSN); 
+}
